@@ -1,6 +1,9 @@
 import express from 'express';
 
-import { getTokens } from './util/spotifyApi';
+import { 
+  getTokens,
+  refreshToken
+ } from './util/spotifyApi';
 import { runInNewContext } from 'vm';
 
 const app = express();
@@ -29,6 +32,15 @@ app.post('/api/getSpotifyToken', async (req, res) => {
   console.log("token data: ", tokenData);
   res.send(tokenData);
 });
+
+app.post('/api/refreshSpotifyToken', async (req, res) => {
+  console.log('refreshing spotify token');
+  console.log(req.body);
+  const refreshToken = req.body.refreshToken;
+  const tokenData = await refreshToken(refreshToken, spotifyCredentials);
+  console.log('new token data', tokenData);
+  res.send(tokenData);
+})
 
 app.listen(3000,()=>
   console.log(`Server is listening on port 3000`)
