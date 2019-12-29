@@ -2,7 +2,7 @@ import express from 'express';
 
 import { 
   getTokens,
-  refreshToken
+  refreshTokens
  } from './util/spotifyApi';
 import { runInNewContext } from 'vm';
 
@@ -37,7 +37,7 @@ app.post('/api/refreshSpotifyToken', async (req, res) => {
   console.log('refreshing spotify token');
   console.log(req.body);
   const refreshToken = req.body.refreshToken;
-  const tokenData = await refreshToken(refreshToken, spotifyCredentials);
+  const tokenData = await refreshTokens(refreshToken, spotifyCredentials);
   console.log('new token data', tokenData);
   res.send(tokenData);
 })
