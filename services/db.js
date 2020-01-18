@@ -11,14 +11,16 @@ const pool = new Pool({
 });
 
 export const getUserBySpotifyUserID = async (spotifyUserID) => {
-  const result = await pool.query('SELECT id, spotifyuserid FROM users');
+  const result = await pool.query('SELECT id, spotifyUserID FROM users');
   console.log(result.rows);
-  return result.rows[0];
+  if (result.rows.length > 0) {
+    return result.rows[0];
+  }
 };
 
 export const addUser = async (spotifyUserID) => {
   const queryText = `
-    INSERT INTO users (spotifyuserid)
+    INSERT INTO users (spotifyUserID)
     VALUES ($1)`
   const queryParams = [spotifyUserID];
   const result = await pool.query(queryText, queryParams);

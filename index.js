@@ -22,7 +22,7 @@ const spotifyCredentials = {
 app.use((req, res, next) => {
   console.log(req.url);
   next();
-})
+});
 
 app.get('/healthcheck', (req, res) => {
   res.send('Hello World');
@@ -46,17 +46,24 @@ app.post('/api/refreshSpotifyToken', async (req, res) => {
   res.send(tokenData);
 });
 
-app.get('/api/getUserFromSpotifyUserID', async (req, res) => {
-  const spotifyUserID = req.body.spotifyUserID;
+app.get('/api/user/:spotifyUserID/spotify', async (req, res) => {
+  const spotifyUserID = req.params.spotifyUserID;
   console.log('getting user with id', spotifyUserID);
-  const user = await getUserBySpotifyUserID()
+  let user = await getUserBySpotifyUserID();
+  if (!user) {
+    console.log('user not found');
+    user = {};
+  }
   res.send(user);
 });
 
-app.post('/api/addUser', async (req, res) => {
+app.post('/api/user/create', async (req, res) => {
   const spotifyUserID = req.body.spotifyUserID;
   console.log('got spotify user id', spotifyUserID);
   await addUser(spotifyUserID);
+  res.status(200).send({
+    msg: 'OK'
+  });
 });
 
 app.listen(3000,()=>
