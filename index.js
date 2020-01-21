@@ -7,8 +7,11 @@ import {
 
  import {
   getUserBySpotifyUserID,
-  addUser
- } from './services/db';
+  addUser,
+  createGroup,
+  addUsersToGroup
+ } from './services/database/db';
+import { create } from 'domain';
 
 const app = express();
 app.use(express.json());
@@ -49,7 +52,7 @@ app.post('/api/refreshSpotifyToken', async (req, res) => {
 app.get('/api/user/:spotifyUserID/spotify', async (req, res) => {
   const spotifyUserID = req.params.spotifyUserID;
   console.log('getting user with id', spotifyUserID);
-  let user = await getUserBySpotifyUserID();
+  let user = await getUserBySpotifyUserID(spotifyUserID);
   if (!user) {
     console.log('user not found');
     user = {};
@@ -61,6 +64,19 @@ app.post('/api/user/create', async (req, res) => {
   const spotifyUserID = req.body.spotifyUserID;
   console.log('got spotify user id', spotifyUserID);
   await addUser(spotifyUserID);
+  res.status(200).send({
+    msg: 'OK'
+  });
+});
+
+app.post('/api/group/create', async (req, res) => {
+  const creatorID = req.body.creatorID;
+  const memberIDs = req.body.memberIDs;
+  const playlistID = req.body.playlistID;
+
+  const group = await createGroup(creatorID, playlistID);
+  await addUsersToGroup(memberIDs, group.id);
+
   res.status(200).send({
     msg: 'OK'
   });
