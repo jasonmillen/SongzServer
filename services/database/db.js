@@ -43,8 +43,9 @@ export const createGroup = async (creatorID, playlistID) => {
 };
 
 export const addUsersToGroup = async (userIDs, groupID) => {
+  console.log("adding users ", userIDs, "to group id ", groupID);
   await Promise.all(
-    userIDs.map(userID => UserGroup.query.insert({
+    userIDs.map(async userID => await UserGroup.query().insert({
       userid: userID,
       groupid: groupID
     }))
