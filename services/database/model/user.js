@@ -1,5 +1,7 @@
 import { Model } from 'objection';
 
+import Group from './group';
+
 export default class User extends Model {
   static get tableName () {
     return 'users';
@@ -10,7 +12,7 @@ export default class User extends Model {
     const Group = require('./group');
 
     return {
-      groups: {
+      user: {
         relation: Model.ManyToManyRelation,
         modelClass: Group,
         join: {

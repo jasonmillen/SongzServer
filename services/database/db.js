@@ -51,3 +51,10 @@ export const addUsersToGroup = async (userIDs, groupID) => {
     }))
   );
 };
+
+export const getGroupsForUser = async (userID) => {
+  console.log('getting groups for user', userID);
+  const groups = await Group.query().innerJoinRelated('usersgroups').where('usersgroups.userid', userID);
+  console.log('groups', groups);
+  return groups;
+}

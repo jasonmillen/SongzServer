@@ -88,10 +88,20 @@ app.post('/api/group/create', async (req, res) => {
   }));
 
   const group = await db.createGroup(creatorID, playlistID);
-  await db.addUsersToGroup(memberIDs, group.id);
+  await db.addUsersToGroup([...memberIDs, creatorID], group.id);
 
   res.status(200).send({
     msg: 'OK'
+  });
+});
+
+app.get('/api/user/:userID/groups', async (req, res) => {
+  const userID = req.params.userID;
+  const groups = await db.getGroupsForUser(userID);
+
+  res.status(200).send({
+    msg: 'OK',
+    groups
   });
 });
 
