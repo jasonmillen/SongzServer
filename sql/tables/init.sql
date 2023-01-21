@@ -16,9 +16,9 @@ CREATE TABLE groups (
 );
 
 CREATE TABLE usersGroups (
+  id BIGSERIAL PRIMARY KEY,
   userID BIGINT REFERENCES users(id),
-  groupID BIGINT REFERENCES groups(id),
-  PRIMARY KEY (userID, groupID)
+  groupID BIGINT REFERENCES groups(id)
 );
 
 CREATE TABLE messages (
@@ -30,8 +30,8 @@ CREATE TABLE messages (
 );
 
 CREATE TABLE messagesUsers (
+  id BIGSERIAL PRIMARY KEY,
   messageID BIGINT REFERENCES messages(id),
   userID BIGINT REFERENCES users(id),
-  readStatus INT, -- whether or not the user has read the message
-  PRIMARY KEY (messageID, userID)
+  readStatus INT -- whether or not the user has read the message
 );
